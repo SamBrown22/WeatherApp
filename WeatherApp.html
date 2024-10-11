@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Weather App</h1>
+    </header>
+    <main>
+        <section id="city-selector">
+            <label for="city">Choose a city:</label>
+            <input type="text" id="city" name="city" placeholder="Enter city name">
+            <div id="suggestions" class="suggestions"></div>
+            <button id="search-btn">Search</button>
+        </section>
+        <section id="weather-info">
+            <h2>Current Weather</h2>
+            <p id="temperature">Temperature: --</p>
+            <p id="humidity">Humidity: --</p>
+            <p id="wind-speed">Wind Speed: --</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Weather App</p>
+    </footer>
+    <script src="WeatherApp.js"></script>
+</body>
+</html>
