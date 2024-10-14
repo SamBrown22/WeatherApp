@@ -3,11 +3,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
+    background-color: #afdbec;
+    color: rgb(49, 126, 129);
 }
 
 header {
-    background-color: #4CAF50;
+    background-color: #5fd4fb;
     color: white;
     text-align: center;
     padding: 1em 0;
@@ -18,7 +19,7 @@ main {
 }
 
 footer {
-    background-color: #4CAF50;
+    background-color: #5fd4fb;
     color: white;
     text-align: center;
     padding: 1em 0;
@@ -45,19 +46,6 @@ footer {
     border-radius: 4px;
 }
 
-#city-selector button {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#city-selector button:hover {
-    background-color: #45a049;
-}
-
 /* Suggestions container */
 #suggestions {
     border: 1px solid #ccc;
@@ -79,7 +67,8 @@ footer {
 /* Weather info section */
 #weather-info {
     display: none;
-    background-color: white;
+    background-color: #e8faf9;
+    color: rgb(49, 126, 129);
     padding: 20px;
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -102,17 +91,17 @@ footer {
 
 .forecast-item {
     padding: 10px;
-    border: 2px solid #4CAF50; /* Match the header and footer color */
+    border: 2px solid #1b8db7; /* Match the header and footer color */
     border-radius: 4px;
-    background-color: #dcedc8; /* Slightly darker green background for better contrast */
+    background-color: #c8ebed; /* Slightly darker green background for better contrast */
     text-align: center;
-    color: #2e7d32; /* Dark green text color */
+    color: #0b3a48; /* Dark green text color */
     transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
 }
 
 .forecast-item img {
     margin: 10px 0; /* Add some margin around the icon */
-    border: 1px solid #4CAF50; /* Add a border to the icon */
+    border: 1px solid #1b8db7; /* Add a border to the icon */
     border-radius: 50%; /* Make the icon circular */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow to the icon */
 }
