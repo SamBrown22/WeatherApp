@@ -78,6 +78,7 @@ footer {
 
 /* Weather info section */
 #weather-info {
+    display: none;
     background-color: white;
     padding: 20px;
     border-radius: 4px;
@@ -90,4 +91,33 @@ footer {
 
 #weather-info p {
     margin: 10px 0;
+}
+
+#forecast {
+    display: flex;
+    justify-content: space-between;
+    overflow-x: auto;
+    padding: 5px;
+}
+
+.forecast-item {
+    padding: 10px;
+    border: 2px solid #4CAF50; /* Match the header and footer color */
+    border-radius: 4px;
+    background-color: #dcedc8; /* Slightly darker green background for better contrast */
+    text-align: center;
+    color: #2e7d32; /* Dark green text color */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+}
+
+.forecast-item img {
+    margin: 10px 0; /* Add some margin around the icon */
+    border: 1px solid #4CAF50; /* Add a border to the icon */
+    border-radius: 50%; /* Make the icon circular */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow to the icon */
+}
+
+.forecast-item:hover {
+    background-color: #c8e6c9; /* Slightly darker green background on hover */
+    transform: scale(1.05); /* Slightly enlarge the item on hover */
 }
