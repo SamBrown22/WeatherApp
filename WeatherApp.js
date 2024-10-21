@@ -1,11 +1,30 @@
 const API_KEY = 'a4939af392d1435dd10417f89f048a23';
 const searchInput = document.getElementById('city');
 const suggestionsContainer = document.getElementById('suggestions');
-const temperature = document.getElementById('temperature');
-const humidity = document.getElementById('humidity');
-const windSpeed = document.getElementById('wind-speed');
 const forecast = document.getElementById('forecast');
 const weatherInfoSection = document.getElementById('weather-info');
+const detailedInfo = document.getElementById('detailed-info');
+const mapContainer = document.getElementById('map');
+
+// Initialize the map
+const map = L.map(mapContainer).setView([0, 0], 2); // Initial view set to world map
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+let marker; // Variable to store the marker
+
+// Add event listener to the input field
+searchInput.addEventListener('input', async () => {
+    const query = searchInput.value.trim();
+    if (query) {
+        const cities = await fetchCityData(query);
+        displaySuggestions(cities);
+    } else {
+        suggestionsContainer.innerHTML = ''; // Clear suggestions if input is empty
+    }
+});
 
 // Function to fetch city data from OpenWeatherMap Geocoding API
 async function fetchCityData(query) {
@@ -41,10 +60,15 @@ function displaySuggestions(cities) {
         suggestionItem.classList.add('suggestion-item');
         suggestionItem.textContent = `${city.name}, ${city.country}`;
 
-        suggestionItem.addEventListener('click', () => {
+        suggestionItem.addEventListener('click', async () => {
             searchInput.value = `${city.name}, ${city.country}`; // Set input value to the selected city
             suggestionsContainer.innerHTML = ''; // Clear suggestions
-            fetchWeatherData(city.lat, city.lon); // Fetch weather data for the selected city
+        
+            // Fetch weather data for the selected city
+            const weatherData = await fetchWeatherData(city.lat, city.lon);
+        
+            // Update the map for the selected city with temperature
+            updateMap(city.lat, city.lon, weatherData.main.temp, weatherData.name);
         });
         suggestionsContainer.appendChild(suggestionItem);
     });
@@ -67,12 +91,19 @@ async function fetchWeatherData(lat, lon) {
 
         // Show the weather-info section
         weatherInfoSection.style.display = 'block';
-    } catch (error) {   
+
+        // Invalidate map size after showing the weather-info section
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 100);
+
+        return currentData; // Return current weather data
+    } catch (error) {
         console.error('Error fetching weather data:', error);
     }
 }
 
-// Function to display weather data
+// Function to display current weather data
 function displayCurrentWeatherData(data) {
     if (data.main) {
         const currentWeatherItem = document.createElement('div');
@@ -103,10 +134,11 @@ function displayCurrentWeatherData(data) {
         // Append the current weather item to the forecast container
         forecast.innerHTML = ''; // Clear previous forecast data
         forecast.appendChild(currentWeatherItem);
-    } else {
-        temperature.textContent = 'Temperature: --';
-        humidity.textContent = 'Humidity: --';
-        windSpeed.textContent = 'Wind Speed: --';
+
+        // Add event listener to display detailed info
+        currentWeatherItem.addEventListener('click', () => {
+            displayDetailedInfo(data);
+        });
     }
 }
 
@@ -140,18 +172,95 @@ function displayForecastWeatherData(data) {
                 ${Math.round(data.list[i].main.temp)} °C <br>
             `;
 
+            // Add event listener to display detailed info
+            forecastItem.addEventListener('click', () => {
+                displayDetailedInfo(data.list[i]);
+            });
+
             forecast.appendChild(forecastItem);
         }
     }
 }
 
-// Add event listener to the input field
-searchInput.addEventListener('input', async () => {
-    const query = searchInput.value.trim();
-    if (query) {
-        const cities = await fetchCityData(query);
-        displaySuggestions(cities);
-    } else {
-        suggestionsContainer.innerHTML = ''; // Clear suggestions if input is empty
+// Function to display detailed information
+function displayDetailedInfo(data) {
+    detailedInfo.innerHTML = `
+        <h3>Detailed Information</h3>
+        <p>Temperature: ${data.main.temp} °C</p>
+        <p>Feels Like: ${data.main.feels_like} °C</p>
+        <p>Humidity: ${data.main.humidity} %</p>
+        <p>Pressure: ${data.main.pressure} hPa</p>
+        <p>Wind Speed: ${data.wind.speed} m/s</p>
+        <p>Wind Direction: ${data.wind.deg} °</p>
+        <p>Weather: ${data.weather[0].description}</p>
+    `;
+}
+
+// Function to update the map
+function updateMap(lat, lon, temp, cityName) {
+    // Remove the existing marker if it exists
+    if (marker) {
+        map.removeLayer(marker);
     }
+
+    // Determine the color based on the temperature
+    let color;
+    if (temp <= 0) {
+        color = 'blue';
+    } else if (temp > 0 && temp <= 15) {
+        color = 'green';
+    } else if (temp > 15 && temp <= 30) {
+        color = 'orange';
+    } else {
+        color = 'red';
+    }
+
+    // Create a custom DivIcon
+    const customIcon = L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div class="custom-div-icon" data-color="${color}">${temp}°C</div>`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, -20]
+    });
+
+    // Add a new marker for the selected city with temperature info
+    marker = L.marker([lat, lon], { icon: customIcon }).addTo(map)
+        .bindPopup(`
+            <div class="custom-popup">
+                ${cityName}
+            </div>
+        `)
+        .openPopup();
+    // Center the map on the marker
+    map.setView([lat, lon], 10);
+
+    // Ensure the map is centered correctly after a short delay
+    setTimeout(() => {
+        map.setView([lat, lon], 10);
+        map.invalidateSize(); // Fix map rendering issues
+    }, 100);
+}
+
+// Add event listener to the map for double-click events
+map.on('dblclick', async (e) => {
+    const { lat, lng } = e.latlng;
+
+    // Fetch weather data for the clicked location
+    const weatherData = await fetchWeatherData(lat, lng);
+
+    // Update the map for the clicked location with temperature
+    updateMap(lat, lng, weatherData.main.temp, weatherData.name);
+
+    // Set input value to the clicked location
+    searchInput.value = `${weatherData.name}`;
+
+    // Clear detailed info
+    detailedInfo.innerHTML = '';
+
+    // Ensure the map is centered correctly after a short delay
+    setTimeout(() => {
+        map.setView([lat, lng], 10);
+        map.invalidateSize(); // Fix map rendering issues
+    }, 100);
 });

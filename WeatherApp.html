@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="WeatherApp.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
     <header>
@@ -18,12 +19,17 @@
         </section>
         <section id="weather-info">
             <h2>Weather Forecast</h2>
+            <div id="map-container">
+                <div id="map"></div>
+            </div>
             <div id="forecast" class="forecast"></div>
+            <div id="detailed-info" class="detailed-info"></div>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 Weather App</p>
     </footer>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="WeatherApp.js"></script>
 </body>
 </html>

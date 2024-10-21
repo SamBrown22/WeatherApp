@@ -1,14 +1,28 @@
+/* Define CSS variables for colors */
+:root {
+    --primary-color: #1b8db7;
+    --secondary-color: #5fd4fb;
+    --background-color: #afdbec;
+    --text-color: rgb(49, 126, 129);
+    --light-background-color: #c8ebed;
+    --hover-background-color: #c8e6c9;
+    --popup-background-color: #e8faf9;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --border-color: #ccc;
+    --suggestion-hover-color: #f0f0f0;
+}
+
 /* General styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #afdbec;
-    color: rgb(49, 126, 129);
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 header {
-    background-color: #5fd4fb;
+    background-color: var(--secondary-color);
     color: white;
     text-align: center;
     padding: 1em 0;
@@ -16,16 +30,18 @@ header {
 
 main {
     padding: 20px;
+    padding-bottom: 60px; /* Ensure the footer doesn't overlap the content */
 }
 
 footer {
-    background-color: #5fd4fb;
+    background-color: var(--secondary-color);
     color: white;
     text-align: center;
     padding: 1em 0;
     position: fixed;
     width: 100%;
     bottom: 0;
+    height: 40px; /* Ensure the footer height matches the padding added to the main element */
 }
 
 /* City selector section */
@@ -42,13 +58,13 @@ footer {
     width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
 }
 
 /* Suggestions container */
 #suggestions {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     background-color: white;
     max-height: 150px;
@@ -61,17 +77,72 @@ footer {
 }
 
 .suggestion-item:hover {
-    background-color: #f0f0f0;
+    background-color: var(--suggestion-hover-color);
+}
+
+/* Map container */
+#map-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Ensure the container takes full height */
+    width: 100%; /* Ensure the container takes full width */
+}
+
+/* Map */
+#map {
+    height: 300px;
+    width: 80%; 
+    margin-bottom: 5px; 
+    align-content: center;
+}
+
+/* Custom DivIcon */
+.custom-div-icon {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.custom-div-icon[data-color="blue"] {
+    background-color: blue;
+}
+
+.custom-div-icon[data-color="green"] {
+    background-color: green;
+}
+
+.custom-div-icon[data-color="orange"] {
+    background-color: orange;
+}
+
+.custom-div-icon[data-color="red"] {
+    background-color: red;
+}
+
+/* Custom popup content */
+.custom-popup {
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: bold;
 }
 
 /* Weather info section */
 #weather-info {
     display: none;
-    background-color: #e8faf9;
-    color: rgb(49, 126, 129);
+    background-color: var(--popup-background-color);
+    color: var(--text-color);
     padding: 20px;
     border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px var(--shadow-color);
+    margin-bottom: 20px;
 }
 
 #weather-info h2 {
@@ -82,31 +153,39 @@ footer {
     margin: 10px 0;
 }
 
+/* Forecast container */
 #forecast {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Align items to the start */
+    gap: 10px; /* Add a gap between items */
     overflow-x: auto;
     padding: 5px;
 }
 
+/* Forecast item */
 .forecast-item {
-    padding: 10px;
-    border: 2px solid #1b8db7; /* Match the header and footer color */
+    flex: 1 1 auto; /* Allow items to grow and shrink */
+    padding: 5px; /* Increased padding for larger cards */
+    border: 2px solid var(--primary-color); /* Match the header and footer color */
     border-radius: 4px;
-    background-color: #c8ebed; /* Slightly darker green background for better contrast */
+    background-color: var(--light-background-color); /* Slightly darker green background for better contrast */
     text-align: center;
-    color: #0b3a48; /* Dark green text color */
+    color: var(--text-color); /* Dark green text color */
     transition: background-color 0.3s, transform 0.3s; /* Smooth transition for hover effect */
+    margin-right: 10px; /* Add margin to the right of each item */
 }
 
+/* Forecast item image */
 .forecast-item img {
     margin: 10px 0; /* Add some margin around the icon */
-    border: 1px solid #1b8db7; /* Add a border to the icon */
+    border: 1px solid var(--primary-color); /* Add a border to the icon */
     border-radius: 50%; /* Make the icon circular */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add a subtle shadow to the icon */
+    box-shadow: 0 0 5px var(--shadow-color); /* Add a subtle shadow to the icon */
 }
 
+/* Hover effect for forecast item */
 .forecast-item:hover {
-    background-color: #c8e6c9; /* Slightly darker green background on hover */
+    background-color: var(--hover-background-color); /* Slightly darker green background on hover */
     transform: scale(1.05); /* Slightly enlarge the item on hover */
+    box-shadow: 0 0 10px var(--shadow-color); /* Enhance shadow on hover */
 }
